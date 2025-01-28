@@ -3,23 +3,22 @@ import axios from "axios";
 
 /** GitHub Profile Component --- shows info from GH API */
 
-function ProfileViewer() {
-  const [profile, setProfile] = useState(null);
+const ProfileViewer = ({ user="luisirizarry" }) => {
+  const [data, setData] = useState(null);
 
-  // this is called *after* component first added to DOM
-  useEffect(function fetchUserWhenMounted() {
-    async function fetchUser() {
-      const userResult = await axios.get(
-        "https://api.github.com/users/elie");
-      setProfile(userResult.data);
+  useEffect(() => {
+    async function loadProfile(){
+      
+      const res = await axios.get(`https://api.github.com/users/${user}`);
+      setData(res.data.name);
     }
-    fetchUser();
-  }, []);
+    loadProfile();
+  }, [user])
 
   return (
-    <div>{profile ? <h2>{profile.name}</h2> : <i>(loading)</i>}</div>
-  );
-};
+    <h3>{data ? data : 'Loading...'}</h3>
+  )
+}
 // end
 
 export default ProfileViewer;
